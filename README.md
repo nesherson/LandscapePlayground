@@ -1,3 +1,5 @@
 # LandscapePlayground
 
-Developed with Unreal Engine 5
+An Unreal Engine project for exercising landscape.
+
+Made with UE5.
