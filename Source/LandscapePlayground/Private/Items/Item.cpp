@@ -24,5 +24,11 @@ void AItem::BeginPlay()
 void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	RunningTime += DeltaTime;
+
+	float deltaZ = Amplitude * FMath::Sin(RunningTime * TimeConstant);
+
+	AddActorWorldOffset(FVector(0, 0, deltaZ));
 }
 
