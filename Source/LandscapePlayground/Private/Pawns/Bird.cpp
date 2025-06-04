@@ -1,14 +1,18 @@
 #include "Pawns/Bird.h"
 
+#include "Components/CapsuleComponent.h"
+
 ABird::ABird()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	Capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
+	SetRootComponent(Capsule);
 }
 
 void ABird::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void ABird::Tick(float DeltaTime)
