@@ -6,6 +6,8 @@
 
 class UCapsuleComponent;
 class USkeletalMeshComponent;
+class USpringArmComponent;
+class UCameraComponent;
 
 UCLASS()
 class LANDSCAPEPLAYGROUND_API ABird : public APawn
@@ -23,6 +25,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	void MoveForward(float Value);
+	void LookUp(float Value);
+	void Turn(float Value);
 
 private:
 
@@ -31,4 +35,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	USkeletalMeshComponent* SkeletalMesh;
+
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* Camera;
 };
