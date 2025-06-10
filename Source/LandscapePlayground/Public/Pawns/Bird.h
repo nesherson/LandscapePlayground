@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputActionValue.h"
 #include "GameFramework/Pawn.h"
 #include "Bird.generated.h"
 
@@ -8,6 +9,8 @@ class UCapsuleComponent;
 class USkeletalMeshComponent;
 class USpringArmComponent;
 class UCameraComponent;
+class UInputMappingContext;
+class UInputAction;
 
 UCLASS()
 class LANDSCAPEPLAYGROUND_API ABird : public APawn
@@ -19,17 +22,24 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	
 protected:
 	virtual void BeginPlay() override;
 
-	void MoveForward(float Value);
-	void LookUp(float Value);
-	void Turn(float Value);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	UInputMappingContext* BirdInputContext;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	UInputAction* MoveAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	UInputAction* LookAction;
+
+	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
 
 private:
-
 	UPROPERTY(VisibleAnywhere)
 	UCapsuleComponent* Capsule;
 
