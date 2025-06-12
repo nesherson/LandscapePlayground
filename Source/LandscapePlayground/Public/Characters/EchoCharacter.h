@@ -9,6 +9,7 @@ class UInputMappingContext;
 class UInputAction;
 class UCameraComponent;
 class USpringArmComponent;
+class UGroomComponent;
 
 UCLASS()
 class LANDSCAPEPLAYGROUND_API AEchoCharacter : public ACharacter
@@ -41,4 +42,11 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* Camera;
+
+	UPROPERTY(VisibleAnywhere, Category = Hair)
+	UGroomComponent* Hair;
+	
+	UPROPERTY(VisibleAnywhere, Category = Hair)
+    UGroomComponent* Eyebrows;
+	
 };

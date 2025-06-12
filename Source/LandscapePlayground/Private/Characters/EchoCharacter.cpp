@@ -3,11 +3,19 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GroomComponent.h"
 
 AEchoCharacter::AEchoCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 380.f, 0.f);
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	SpringArm->SetupAttachment(GetRootComponent());
@@ -16,6 +24,14 @@ AEchoCharacter::AEchoCharacter()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	Camera->SetupAttachment(SpringArm);
+
+	Hair = CreateDefaultSubobject<UGroomComponent>(TEXT("Hair"));
+	Hair->SetupAttachment(GetMesh());
+	Hair->AttachmentName = FString("head");
+	
+	Eyebrows = CreateDefaultSubobject<UGroomComponent>(TEXT("Eyebrows"));
+	Eyebrows->SetupAttachment(GetMesh());
+	Eyebrows->AttachmentName = FString("head");
 }
 
 void AEchoCharacter::BeginPlay()
@@ -50,12 +66,14 @@ void AEchoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void AEchoCharacter::Move(const FInputActionValue& InputActionValue)
 {
-	FVector2D MovementVec = InputActionValue.Get<FVector2D>();
-	FVector ForwardVec = GetActorForwardVector();
-	FVector RightVec = GetActorRightVector();
+	const FVector2D MovementVec = InputActionValue.Get<FVector2D>();
+	const FRotator ControlRotation = GetControlRotation();
+	const FRotator YawRotation = FRotator(0, ControlRotation.Yaw, 0);
+	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-	AddMovementInput(ForwardVec, MovementVec.Y);
-	AddMovementInput(RightVec, MovementVec.X);
+	AddMovementInput(Direction, MovementVec.Y);
+	AddMovementInput(RightDirection, MovementVec.X);
 }
 
 void AEchoCharacter::Look(const FInputActionValue& InputActionValue)
@@ -64,8 +82,8 @@ void AEchoCharacter::Look(const FInputActionValue& InputActionValue)
 
 	if (GetController())
 	{
-		AddControllerYawInput(LookVec.X);
 		AddControllerPitchInput(LookVec.Y);
+		AddControllerYawInput(LookVec.X);
 	}
 }
 
