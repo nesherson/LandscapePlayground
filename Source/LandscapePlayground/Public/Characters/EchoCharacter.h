@@ -31,10 +31,23 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
 	UInputAction* LookInputAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	UInputAction* ZoomInputAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	float ZoomSpeed;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	float ZoomMaxDistance;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	float ZoomMinDistance;
 	
 	virtual void BeginPlay() override;
 	void Move(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
+	void Zoom(const FInputActionValue& InputActionValue);
 
 private:
 	UPROPERTY(VisibleAnywhere)

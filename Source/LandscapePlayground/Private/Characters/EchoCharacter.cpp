@@ -13,6 +13,9 @@ AEchoCharacter::AEchoCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
+	ZoomSpeed = 10;
+	ZoomMaxDistance = 500;
+	ZoomMinDistance = 100;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 380.f, 0.f);
@@ -61,6 +64,7 @@ void AEchoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	{
 		EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &AEchoCharacter::Move);
 		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &AEchoCharacter::Look);
+		EnhancedInputComponent->BindAction(ZoomInputAction, ETriggerEvent::Triggered, this, &AEchoCharacter::Zoom);
 	}
 }
 
@@ -84,6 +88,21 @@ void AEchoCharacter::Look(const FInputActionValue& InputActionValue)
 	{
 		AddControllerPitchInput(LookVec.Y);
 		AddControllerYawInput(LookVec.X);
+	}
+}
+
+void AEchoCharacter::Zoom(const FInputActionValue& InputActionValue)
+{
+	const float ZoomValue = InputActionValue.Get<float>();
+
+	if (SpringArm)
+	{
+		float ZoomDistance = SpringArm->TargetArmLength + ZoomValue * ZoomSpeed;
+
+		if (ZoomDistance >= ZoomMinDistance && ZoomDistance <= ZoomMaxDistance)
+		{
+			SpringArm->TargetArmLength = ZoomDistance;
+		}
 	}
 }
 
